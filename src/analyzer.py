@@ -662,7 +662,7 @@ class GeminiAnalyzer:
         if not self._litellm_available:
             logger.warning("No LLM configured (LITELLM_MODEL / API keys), AI analysis will be unavailable")
 
-        def _get_analysis_system_prompt(self, report_language: str, stock_code: str = "") -> str:
+    def _get_analysis_system_prompt(self, report_language: str, stock_code: str = "") -> str:
         """Build the analyzer system prompt with VERY STRONG English forcing."""
         lang = normalize_report_language(report_language)
         market_role = get_market_role(stock_code, lang)
