@@ -25,19 +25,18 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class MarketIndex:
-    """大盘指数数据"""
-    code: str  # 指数代码
-    name: str  # 指数名称
-    current: float = 0.0  # 当前点位
-    change: float = 0.0  # 涨跌点数
-    change_pct: float = 0.0  # 涨跌幅(%)
-    open: float = 0.0  # 开盘点位
-    high: float = 0.0  # 最高点位
-    low: float = 0.0  # 最低点位
-    prev_close: float = 0.0  # 昨收点位
-    volume: float = 0.0  # 成交量（手）
-    amount: float = 0.0  # 成交额（元）
-    amplitude: float = 0.0  # 振幅(%)
+    code: str
+    name: str
+    current: float = 0.0
+    change: float = 0.0
+    change_pct: float = 0.0
+    open: float = 0.0
+    high: float = 0.0
+    low: float = 0.0
+    prev_close: float = 0.0
+    volume: float = 0.0
+    amount: float = 0.0
+    amplitude: float = 0.0
    
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -57,24 +56,19 @@ class MarketIndex:
 
 @dataclass
 class MarketOverview:
-    """市场概览数据"""
-    date: str  # 日期
-    indices: List[MarketIndex] = field(default_factory=list)  # 主要指数
-    up_count: int = 0  # 上涨家数
-    down_count: int = 0  # 下跌家数
-    flat_count: int = 0  # 平盘家数
-    limit_up_count: int = 0  # 涨停家数
-    limit_down_count: int = 0  # 跌停家数
-    total_amount: float = 0.0  # 两市成交额（亿元）
-    top_sectors: List[Dict] = field(default_factory=list)  # 涨幅前5板块
-    bottom_sectors: List[Dict] = field(default_factory=list)  # 跌幅前5板块
+    date: str
+    indices: List[MarketIndex] = field(default_factory=list)
+    up_count: int = 0
+    down_count: int = 0
+    flat_count: int = 0
+    limit_up_count: int = 0
+    limit_down_count: int = 0
+    total_amount: float = 0.0
+    top_sectors: List[Dict] = field(default_factory=list)
+    bottom_sectors: List[Dict] = field(default_factory=list)
 
 
 class MarketAnalyzer:
-    """
-    大盘复盘分析器
-    """
-   
     def __init__(
         self,
         search_service: Optional[SearchService] = None,
@@ -226,7 +220,6 @@ class MarketAnalyzer:
         return "\n".join(lines)
 
     def _build_review_prompt(self, overview: MarketOverview, news: List) -> str:
-        """Build review prompt with VERY STRONG English forcing (always English now)."""
         indices_text = ""
         for idx in overview.indices:
             direction = "↑" if idx.change_pct > 0 else "↓" if idx.change_pct < 0 else "-"
@@ -310,12 +303,13 @@ Output the report content directly, no extra commentary.
 """
 
     def _generate_template_review(self, overview: MarketOverview, news: List) -> str:
-        """使用模板生成复盘报告（无大模型时的备选方案）"""
+        """Fallback template - fully in English"""
         mood_code = self.profile.mood_index_code
         mood_index = next(
             (idx for idx in overview.indices if idx.code == mood_code or idx.code.endswith(mood_code)),
             None,
         )
+        market_mood = "Sideways"
         if mood_index:
             if mood_index.change_pct > 1:
                 market_mood = "Strong Rise"
@@ -325,8 +319,6 @@ Output the report content directly, no extra commentary.
                 market_mood = "Mild Decline"
             else:
                 market_mood = "Sharp Decline"
-        else:
-            market_mood = "Sideways"
 
         indices_text = ""
         for idx in overview.indices[:4]:
