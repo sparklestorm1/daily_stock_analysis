@@ -40,7 +40,6 @@ from src.market_context import get_market_role, get_market_guidelines
 
 logger = logging.getLogger(__name__)
 
-# ==================== HELPER FUNCTIONS (unchanged) ====================
 def check_content_integrity(result: "AnalysisResult") -> Tuple[bool, List[str]]:
     missing: List[str] = []
     if result.sentiment_score is None:
@@ -94,8 +93,6 @@ def apply_placeholder_fill(result: "AnalysisResult", missing_fields: List[str]) 
             if "sniper_points" not in result.dashboard["battle_plan"]:
                 result.dashboard["battle_plan"]["sniper_points"] = {}
             result.dashboard["battle_plan"]["sniper_points"]["stop_loss"] = placeholder
-
-# (chip_structure, fill_price_position_if_needed, get_stock_name_multi_source, AnalysisResult class remain exactly as in your original file)
 
 @dataclass
 class AnalysisResult:
