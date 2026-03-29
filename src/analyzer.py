@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ===================================
-A股自选股智能分析系统 - AI分析层 (English + Macro + Correlation Reasoning)
+A股自选股智能分析系统 - AI分析层
 ===================================
 """
 import json
@@ -37,7 +37,6 @@ from src.report_language import (
 )
 from src.schemas.report_schema import AnalysisReportSchema
 from src.market_context import get_market_role, get_market_guidelines
-import yfinance as yf   # for macro data
 
 logger = logging.getLogger(__name__)
 
